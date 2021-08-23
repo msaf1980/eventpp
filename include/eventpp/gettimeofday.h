@@ -1,5 +1,5 @@
-#ifndef __EVENTPP_GETTIMEOFDAY_H__
-#define __EVENTPP_GETTIMEOFDAY_H__
+#ifndef __EVENTPP_GETTIMEOFDAY_H_
+#define __EVENTPP_GETTIMEOFDAY_H_
 
 #include <sys/time.h>
 #include <stdint.h>
@@ -70,4 +70,4 @@ inline struct timeval timevalconv(uint64_t time_us) {
 }
 
 
-#endif // __EVENTPP_GETTIMEOFDAY_H__
+#endif /* __EVENTPP_GETTIMEOFDAY_H_ */

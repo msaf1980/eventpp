@@ -36,10 +36,10 @@
 //     std::thread th(MyEventThread, base, ev);
 //     th.join();
 //     eventpp::Duration cost = eventpp::Timestamp::Now() - start;
-//     H_TEST_ASSERT(g_timeout <= cost);
-//     H_TEST_ASSERT(g_event_handler_called);
+//     REQUIRE(g_timeout <= cost);
+//     REQUIRE(g_event_handler_called);
 //     event_base_free(base);
-//     H_TEST_ASSERT(eventpp::GetActiveEventCount() == 0);
+//     REQUIRE(eventpp::GetActiveEventCount() == 0);
 // }
 
 

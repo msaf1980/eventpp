@@ -5,6 +5,9 @@ set(
     event_loop_thread_test.cpp
     event_loop_thread_pool_test.cpp
     event_watcher_test.cpp
+    invoke_timer_test.cpp
+    sockets_test.cpp
+    time_test.cpp
 )
 
 set(TEST_LIBRARIES Threads::Threads event)

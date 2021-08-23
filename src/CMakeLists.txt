@@ -4,11 +4,14 @@ set_version(EVENTPP_VERSION EVENTPP_VERSION_MAJOR EVENTPP_VERSION_MINOR EVENTPP_
 
 set(
     EVENTPP_SOURCES
+    duration.cpp
     event_loop.cpp
     event_loop_thread.cpp
     event_loop_thread_pool.cpp
     event_watcher.cpp
     invoke_timer.cpp
+    sockets.cpp
+    utility.cpp
 )
 
 include(GNUInstallDirs)

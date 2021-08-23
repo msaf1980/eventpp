@@ -1,44 +1,57 @@
-#include "test_common.h"
+#include <eventpp/sockets.hpp>
 
-#include <evpp/sockets.h>
+#include <string>
+#include <vector>
 
-TEST_UNIT(TestParseFromIPPort1) {
+#include "doctest.h"
+
+#define H_ARRAYSIZE(a) \
+    ((sizeof(a) / sizeof(*(a))) / \
+     static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
+
+TEST_CASE("TestParseFromIPPort1")
+{
     std::string dd[] = {
         "192.168.0.6:99",
         "101.205.216.65:60931",
         "127.0.0.1:19099",
     };
 
-    for (size_t i = 0; i < H_ARRAYSIZE(dd); i++) {
+    for (size_t i = 0; i < H_ARRAYSIZE(dd); i++)
+    {
+        CAPTURE(i);
         struct sockaddr_storage ss;
-        auto rc = evpp::sock::ParseFromIPPort(dd[i].data(), ss);
-        H_TEST_ASSERT(rc);
-        auto s = evpp::sock::ToIPPort(&ss);
+        auto rc = eventpp::sock::ParseFromIPPort(dd[i].data(), ss);
+        REQUIRE(rc);
+        auto s = eventpp::sock::ToIPPort(&ss);
         rc = s == dd[i];
-        H_TEST_ASSERT(rc);
+        REQUIRE(rc);
     }
 }
 
-TEST_UNIT(TestParseFromIPPort2) {
-    std::string dd[] = {
+TEST_CASE("TestParseFromIPPort2")
+{
+    std::vector<std::string> dd{
         "5353.168.0.6",
         "5353.168.0.6:",
         "5353.168.0.6:99",
         "1011.205.216.65:60931",
     };
 
-    for (size_t i = 0; i < H_ARRAYSIZE(dd); i++) {
+    for (size_t i = 0; i < dd.size(); i++)
+    {
+        CAPTURE(i);
         struct sockaddr_storage ss;
-        auto rc = evpp::sock::ParseFromIPPort(dd[i].data(), ss);
-        H_TEST_ASSERT(!rc);
-        rc = evpp::sock::IsZeroAddress(&ss);
-        H_TEST_ASSERT(rc);
+        auto rc = eventpp::sock::ParseFromIPPort(dd[i].data(), ss);
+        REQUIRE(!rc);
+        rc = eventpp::sock::IsZeroAddress(&ss);
+        REQUIRE(rc);
     }
 }
 
 // TODO IPv6 test failed
 #if 0
-TEST_UNIT(TestParseFromIPPort3) {
+TEST_CASE(TestParseFromIPPort3) {
     std::string dd[] = {
         "192.168.0.6:99",
         "101.205.216.65:60931",
@@ -48,15 +61,15 @@ TEST_UNIT(TestParseFromIPPort3) {
 
     for (size_t i = 0; i < H_ARRAYSIZE(dd); i++) {
         struct sockaddr_storage ss;
-        auto rc = evpp::sock::ParseFromIPPort(dd[i].data(), ss);
-        H_TEST_ASSERT(rc);
-        auto s = evpp::sock::ToIPPort(&ss);
+        auto rc = eventpp::sock::ParseFromIPPort(dd[i].data(), ss);
+        REQUIRE(rc);
+        auto s = eventpp::sock::ToIPPort(&ss);
         rc = s == dd[i];
-        H_TEST_ASSERT(rc);
+        REQUIRE(rc);
     }
 }
 
-TEST_UNIT(TestParseFromIPPort4) {
+TEST_CASE(TestParseFromIPPort4) {
     std::string dd[] = {
         "5353.168.0.6",
         "5353.168.0.6:",
@@ -70,41 +83,45 @@ TEST_UNIT(TestParseFromIPPort4) {
 
     for (size_t i = 0; i < H_ARRAYSIZE(dd); i++) {
         struct sockaddr_storage ss;
-        auto rc = evpp::sock::ParseFromIPPort(dd[i].data(), ss);
-        H_TEST_ASSERT(!rc);
-        rc = evpp::sock::IsZeroAddress(&ss);
-        H_TEST_ASSERT(rc);
+        auto rc = eventpp::sock::ParseFromIPPort(dd[i].data(), ss);
+        REQUIRE(!rc);
+        rc = eventpp::sock::IsZeroAddress(&ss);
+        REQUIRE(rc);
     }
 }
 #endif
 
-
-TEST_UNIT(TestSplitHostPort1) {
-    struct {
+TEST_CASE("TestSplitHostPort1")
+{
+    struct
+    {
         std::string addr;
         std::string host;
         int port;
     } dd[] = {
         {"192.168.0.6:99", "192.168.0.6", 99},
-        { "101.205.216.65:60931", "101.205.216.65", 60931},
+        {"101.205.216.65:60931", "101.205.216.65", 60931},
         {"[fe80::886a:49f3:20f3:add2]:80", "fe80::886a:49f3:20f3:add2", 80},
         {"[fe80::c455:9298:85d2:f2b6]:8080", "fe80::c455:9298:85d2:f2b6", 8080},
         {"fe80::886a:49f3:20f3:add2]:80", "fe80::886a:49f3:20f3:add2", 80}, // This is OK
     };
 
 
-    for (size_t i = 0; i < H_ARRAYSIZE(dd); i++) {
+    for (size_t i = 0; i < H_ARRAYSIZE(dd); i++)
+    {
         std::string host;
         int port;
-        auto rc = evpp::sock::SplitHostPort(dd[i].addr.data(), host, port);
-        H_TEST_ASSERT(rc);
-        H_TEST_ASSERT(dd[i].host == host);
-        H_TEST_ASSERT(dd[i].port == port);
+        auto rc = eventpp::sock::SplitHostPort(dd[i].addr.data(), host, port);
+        REQUIRE(rc);
+        REQUIRE(dd[i].host == host);
+        REQUIRE(dd[i].port == port);
     }
 }
 
-TEST_UNIT(TestSplitHostPort2) {
-    struct {
+TEST_CASE("TestSplitHostPort2")
+{
+    struct
+    {
         std::string addr;
         std::string host;
         int port;
@@ -112,10 +129,11 @@ TEST_UNIT(TestSplitHostPort2) {
         {"[fe80::c455:9298:85d2:f2b6:8080", "fe80::c455:9298:85d2:f2b6", 8080} // This is not OK
     };
 
-    for (size_t i = 0; i < H_ARRAYSIZE(dd); i++) {
+    for (size_t i = 0; i < H_ARRAYSIZE(dd); i++)
+    {
         std::string host;
         int port;
-        auto rc = evpp::sock::SplitHostPort(dd[i].addr.data(), host, port);
-        H_TEST_ASSERT(!rc);
+        auto rc = eventpp::sock::SplitHostPort(dd[i].addr.data(), host, port);
+        REQUIRE(!rc);
     }
 }

@@ -1,9 +1,9 @@
-#ifndef DURATION
-#define DURATION
+#ifndef __EVENTPP_DURATION_HPP__
+#define __EVENTPP_DURATION_HPP__
 
 // Modeled after the time.Duration of Golang project.
 
-// #include <eventpp/inner_pre.h>
+#include "sys/platform_config.h"
 
 #include <cstdint>
 
@@ -69,4 +69,4 @@ private:
 #include "duration_inline.hpp"
 
 
-#endif /* DURATION */
+#endif /* __EVENTPP_DURATION_HPP__ */

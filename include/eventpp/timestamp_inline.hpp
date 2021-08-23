@@ -1,7 +1,7 @@
 #ifndef __EVENTPP_TIMESTAMP_INLINE_HPP__
 #define __EVENTPP_TIMESTAMP_INLINE_HPP__
 
-#include "sys/gettimeofday.h"
+#include "gettimeofday.h"
 
 namespace eventpp {
 inline Timestamp::Timestamp()

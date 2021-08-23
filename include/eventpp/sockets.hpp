@@ -17,12 +17,12 @@ namespace sock {
 
 EVPP_EXPORT evpp_socket_t CreateNonblockingSocket();
 EVPP_EXPORT evpp_socket_t CreateUDPServer(int port);
-EVPP_EXPORT void SetKeepAlive(evpp_socket_t fd, bool on);
-EVPP_EXPORT void SetReuseAddr(evpp_socket_t fd);
-EVPP_EXPORT void SetReusePort(evpp_socket_t fd);
-EVPP_EXPORT void SetTCPNoDelay(evpp_socket_t fd, bool on);
-EVPP_EXPORT void SetTimeout(evpp_socket_t fd, uint32_t timeout_ms);
-EVPP_EXPORT void SetTimeout(evpp_socket_t fd, const Duration& timeout);
+EVPP_EXPORT int SetKeepAlive(evpp_socket_t fd, bool on);
+EVPP_EXPORT int SetReuseAddr(evpp_socket_t fd);
+EVPP_EXPORT int SetReusePort(evpp_socket_t fd);
+EVPP_EXPORT int SetTCPNoDelay(evpp_socket_t fd, bool on);
+EVPP_EXPORT int SetTimeout(evpp_socket_t fd, uint32_t timeout_ms);
+EVPP_EXPORT int SetTimeout(evpp_socket_t fd, const Duration& timeout);
 EVPP_EXPORT std::string ToIPPort(const struct sockaddr_storage* ss);
 EVPP_EXPORT std::string ToIPPort(const struct sockaddr* ss);
 EVPP_EXPORT std::string ToIPPort(const struct sockaddr_in* ss);

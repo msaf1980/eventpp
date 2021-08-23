@@ -5,17 +5,19 @@
 
 #include <chrono>
 
-namespace eventpp {
-class Timestamp {
+namespace eventpp
+{
+class Timestamp
+{
 public:
     Timestamp();
     explicit Timestamp(int64_t nanoseconds);
-    explicit Timestamp(const struct timeval& t);
+    explicit Timestamp(const struct timeval & t);
 
     static Timestamp Now(); // returns the current local time.
 
     struct timeval TimeVal() const;
-    void To(struct timeval* t) const;
+    void To(struct timeval * t) const;
 
     // Unix returns t as a Unix time, the number of seconds elapsed
     // since January 1, 1970 UTC.
@@ -34,14 +36,14 @@ public:
     void Add(Duration d);
 
     bool IsEpoch() const;
-    bool operator< (const Timestamp& rhs) const;
-    bool operator==(const Timestamp& rhs) const;
+    bool operator<(const Timestamp & rhs) const;
+    bool operator==(const Timestamp & rhs) const;
 
-    Timestamp operator+=(const Duration& rhs);
-    Timestamp operator+ (const Duration& rhs) const;
-    Timestamp operator-=(const Duration& rhs);
-    Timestamp operator- (const Duration& rhs) const;
-    Duration  operator- (const Timestamp& rhs) const;
+    Timestamp operator+=(const Duration & rhs);
+    Timestamp operator+(const Duration & rhs) const;
+    Timestamp operator-=(const Duration & rhs);
+    Timestamp operator-(const Duration & rhs) const;
+    Duration operator-(const Timestamp & rhs) const;
 
 private:
     // ns_ gives the number of nanoseconds elapsed since the Epoch
