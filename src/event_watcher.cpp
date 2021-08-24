@@ -64,12 +64,12 @@ bool EventWatcher::Watch(Duration timeout)
     {
         // When InvokerTimer::periodic_ == true, EventWatcher::Watch will be called many times
         // so we need to remove it from event_base before we add it into event_base
-        event_del(event_);
+        EventDel(event_);
         attached_ = false;
     }
 
     assert(!attached_);
-    if (event_add(event_, timeoutval) != 0)
+    if (EventAdd(event_, timeoutval) != 0)
     {
         //LOG_ERROR << "event_add failed. fd=" << this->event_->ev_fd << " event_=" << event_;
         return false;
@@ -84,7 +84,7 @@ void EventWatcher::FreeEvent()
     {
         if (attached_)
         {
-            event_del(event_);
+            EventDel(event_);
             attached_ = false;
         }
 

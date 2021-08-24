@@ -41,4 +41,5 @@ TEST_CASE("testEventLoopThread") {
     t->Stop(true);
     t.reset();
     REQUIRE(g_count == 4);
+    REQUIRE(eventpp::GetActiveEventCount() == 0);
 }

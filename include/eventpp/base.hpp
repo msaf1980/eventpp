@@ -4,6 +4,6 @@
 #include <event2/event-config.h>
 #include <event2/event.h>
 
-#include "sys/platform_config.h"
+#include "inner_pre.hpp"
 
 #endif // __EVENTPP_BASE_HPP__

@@ -9,6 +9,8 @@ set(
     event_loop_thread.cpp
     event_loop_thread_pool.cpp
     event_watcher.cpp
+    fd_channel.cpp
+    inner_pre.cpp
     invoke_timer.cpp
     sockets.cpp
     utility.cpp

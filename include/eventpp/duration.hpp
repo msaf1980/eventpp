@@ -3,9 +3,9 @@
 
 // Modeled after the time.Duration of Golang project.
 
-#include "sys/platform_config.h"
-
 #include <cstdint>
+
+#include "sys/platform_config.h"
 
 namespace eventpp
 {

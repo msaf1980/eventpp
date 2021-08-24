@@ -54,7 +54,7 @@ TEST_CASE("TestEventLoop1")
     REQUIRE(delay <= cost);
     REQUIRE(event_handler_called);
     REQUIRE(periodic_run_count == 3);
-    // REQUIRE(eventpp::GetActiveEventCount() == 0);
+    REQUIRE(eventpp::GetActiveEventCount() == 0);
 }
 
 void OnTimer(eventpp::EventLoop * loop)
@@ -64,29 +64,27 @@ void OnTimer(eventpp::EventLoop * loop)
 
 TEST_CASE("TestEventLoop2")
 {
-    int active = 1;
     eventpp::EventLoop loop;
-    auto timer = [&loop, &active]() {
-        auto close = [&loop, &active]() { active--; loop.Stop(); };
+    auto timer = [&loop]() {
+        auto close = [&loop]() { loop.Stop(); };
         loop.QueueInLoop(close);
     };
     loop.RunAfter(eventpp::Duration(0.5), timer);
     loop.Run();
-    REQUIRE(active == 0);
+    REQUIRE(eventpp::GetActiveEventCount() == 0);
 }
 
 // Test std::move of C++11
 TEST_CASE("TestEventLoop3")
 {
-    int active = 1;
     eventpp::EventLoop loop;
-    auto timer = [&loop, &active]() {
-        auto close = [&loop, &active]() { active--; loop.Stop(); };
+    auto timer = [&loop]() {
+        auto close = [&loop]() { loop.Stop(); };
         loop.QueueInLoop(close);
     };
     loop.RunAfter(eventpp::Duration(0.5), std::move(timer));
     loop.Run();
-    REQUIRE(active == 0);
+    REQUIRE(eventpp::GetActiveEventCount() == 0);
 }
 
 
@@ -125,6 +123,7 @@ TEST_CASE("TestEventLoop4")
     invoke_timer.reset();
     timer.reset();
     REQUIRE(active == 0);
+    REQUIRE(eventpp::GetActiveEventCount() == 0);
 }
 
 

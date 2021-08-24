@@ -140,4 +140,5 @@ TEST_CASE("testSignalEventWatcher")
     thread.reset();
     REQUIRE(g_event_handler_called);
     REQUIRE(active == 0);
+    REQUIRE(eventpp::GetActiveEventCount() == 0);
 }

@@ -48,6 +48,7 @@ TEST_CASE("testEventLoopThreadPool")
     REQUIRE((int)g_working_tids.size() == thread_num);
     pool.reset();
     loop.reset();
+    REQUIRE(eventpp::GetActiveEventCount() == 0);
 }
 
 
@@ -73,4 +74,5 @@ TEST_CASE("testEventLoopThreadPool2")
     loop->Stop(true);
     assert(loop->IsStopped());
     loop.reset();
+    REQUIRE(eventpp::GetActiveEventCount() == 0);
 }

@@ -48,4 +48,5 @@ TEST_CASE("testInvokerTimerCancel")
     eventpp::Duration cost = eventpp::Timestamp::Now() - start;
     REQUIRE(delay <= cost);
     REQUIRE(!event_handler_called);
+    REQUIRE(eventpp::GetActiveEventCount() == 0);
 }

@@ -10,13 +10,6 @@
 
 #include <assert.h>
 
-// #include "evpp/inner_pre.h"
-#include "event_watcher.hpp"
-// #include "evpp/duration.h"
-// #include "evpp/any.h"
-#include "invoke_timer.hpp"
-#include "server_status.hpp"
-
 // #ifdef H_HAVE_BOOST
 // #include <boost/lockfree/queue.hpp>
 // #elif defined(H_HAVE_CAMERON314_CONCURRENTQUEUE)
@@ -31,6 +24,13 @@
 // #endif // __GNUC__
 
 // #endif
+
+// #include "evpp/inner_pre.h"
+#include "event_watcher.hpp"
+// #include "evpp/duration.h"
+// #include "evpp/any.h"
+#include "invoke_timer.hpp"
+#include "server_status.hpp"
 
 namespace eventpp
 {
