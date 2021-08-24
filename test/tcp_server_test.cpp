@@ -9,7 +9,7 @@
 #include <eventpp/tcp/tcp_conn.hpp>
 #include <eventpp/tcp/tcp_server.hpp>
 
-#include "doctest.h"
+#include "test.h"
 
 static bool connected = false;
 static bool message_recved = false;
@@ -53,22 +53,22 @@ TEST_CASE("testTCPServer1")
     //         message_recved = true;
     //     });
     //     bool rc = tsrv->Init();
-    //     H_TEST_ASSERT(rc);
+    //     REQUIRE(rc);
     //     rc = tsrv->Start();
-    //     H_TEST_ASSERT(rc);
+    //     REQUIRE(rc);
     //     loop->RunAfter(eventpp::Duration(1.4), [&tsrv]() { tsrv->Stop(); });
     //     loop->RunAfter(eventpp::Duration(1.6), [&loop]() { loop->Stop(); });
     //     std::shared_ptr<eventpp::TCPClient> client = StartTCPClient(tcp_client_thread->loop());
     //     loop->Run();
     //     tcp_client_thread->Stop(true);
-    //     H_TEST_ASSERT(!loop->IsRunning());
-    //     H_TEST_ASSERT(tcp_client_thread->IsStopped());
-    //     H_TEST_ASSERT(connected);
-    //     H_TEST_ASSERT(message_recved);
+    //     REQUIRE(!loop->IsRunning());
+    //     REQUIRE(tcp_client_thread->IsStopped());
+    //     REQUIRE(connected);
+    //     REQUIRE(message_recved);
     //     tcp_client_thread.reset();
     //     loop.reset();
     //     tsrv.reset();
-    //     H_TEST_ASSERT(eventpp::GetActiveEventCount() == 0);
+    //     REQUIRE(eventpp::GetActiveEventCount() == 0);
 
     connected = false;
     message_recved = false;

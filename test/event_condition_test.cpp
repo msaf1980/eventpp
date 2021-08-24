@@ -4,7 +4,7 @@
 #include <eventpp/event_loop.hpp>
 #include <eventpp/event_watcher.hpp>
 
-#include "doctest.h"
+#include "test.h"
 
 // namespace {
 // static bool g_event_handler_called = false;

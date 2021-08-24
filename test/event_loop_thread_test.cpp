@@ -6,7 +6,7 @@
 #include <atomic>
 #include <memory>
 
-#include "doctest.h"
+#include "test.h"
 
 static bool g_timeout = false;
 static std::atomic<int> g_count;

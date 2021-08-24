@@ -6,7 +6,7 @@
 #include <memory>
 #include <thread>
 
-#include "doctest.h"
+#include "test.h"
 
 namespace evloop
 {

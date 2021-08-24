@@ -9,7 +9,7 @@
 #include <eventpp/tcp/tcp_conn.hpp>
 #include <eventpp/tcp/tcp_server.hpp>
 
-#include "doctest.h"
+#include "test.h"
 
 namespace
 {

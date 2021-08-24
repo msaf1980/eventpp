@@ -4,7 +4,7 @@
 
 #include <memory>
 
-#include "doctest.h"
+#include "test.h"
 
 TEST_CASE("testDNSResolver")
 {

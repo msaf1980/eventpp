@@ -8,7 +8,7 @@
 #include <set>
 #include <thread>
 
-#include "doctest.h"
+#include "test.h"
 
 static std::set<std::thread::id> g_working_tids;
 

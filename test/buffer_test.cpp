@@ -2,7 +2,7 @@
 
 #include <eventpp/buffer.hpp>
 
-#include "doctest.h"
+#include "test.h"
 
 using eventpp::Buffer;
 using std::string;

@@ -3,7 +3,7 @@
 #include <eventpp/udp/sync_udp_client.hpp>
 #include <eventpp/udp/udp_server.hpp>
 
-#include "doctest.h"
+#include "test.h"
 
 static int g_count = 0;
 static bool g_exit = false;

@@ -9,7 +9,7 @@
 #include <eventpp/event_watcher.hpp>
 #include <eventpp/timestamp.hpp>
 
-#include "doctest.h"
+#include "test.h"
 
 //
 // namespace evtimer {

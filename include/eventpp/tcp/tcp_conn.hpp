@@ -1,6 +1,7 @@
 #ifndef __EVENTPP_TCP_CONN_HPP_
 #define __EVENTPP_TCP_CONN_HPP_
 
+#include <any>
 #include <atomic>
 
 //#include "../any.hpp"
@@ -55,6 +56,7 @@ public:
     EventLoop * loop() const { return loop_; }
     evpp_socket_t fd() const { return fd_; }
     uint64_t id() const { return id_; }
+
     // void set_context(const Any & c) { context_[0] = c; }
     // const Any & context() const { return context_[0]; }
     // void set_context(int index, const Any & c)
@@ -67,6 +69,20 @@ public:
     //     assert(index < kContextCount && index >= 0);
     //     return context_[index];
     // }
+
+    void set_context(const std::any & c) { context_[0] = c; }
+    const std::any & context() const { return context_[0]; }
+    void set_context(int index, const std::any & c)
+    {
+        assert(index < kContextCount && index >= 0);
+        context_[index] = c;
+    }
+    const std::any & context(int index) const
+    {
+        assert(index < kContextCount && index >= 0);
+        return context_[index];
+    }
+
     // Return the remote peer's address with form "ip:port"
     const std::string & remote_addr() const { return remote_addr_; }
     const std::string & name() const { return name_; }
@@ -152,7 +168,10 @@ private:
     {
         kContextCount = 16,
     };
+
     // Any context_[kContextCount];
+    std::any context_[kContextCount];
+
     Type type_;
     std::atomic<Status> status_;
     size_t high_water_mark_ = 128 * 1024 * 1024; // Default 128MB

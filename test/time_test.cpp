@@ -2,7 +2,7 @@
 // #include <eventpp/gettimeofday.h>
 #include <eventpp/timestamp.hpp>
 
-#include "doctest.h"
+#include "test.h"
 
 TEST_CASE("testDuration")
 {

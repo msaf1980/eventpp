@@ -13,8 +13,12 @@ EventLoopThread::EventLoopThread() : event_loop_(new EventLoop)
 EventLoopThread::~EventLoopThread()
 {
     // DLOG_TRACE << "loop=" << event_loop_;
-    assert(IsStopped());
-    Join();
+    if (status_.load() == kRunning)
+    {
+        Stop(true);
+    } else {
+        Join();
+    }
 }
 
 bool EventLoopThread::Start(bool wait_thread_started, Functor pre, Functor post)

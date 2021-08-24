@@ -15,7 +15,24 @@ set(
     inner_pre.cpp
     invoke_timer.cpp
     listener.cpp
+    #
+    evpphttp/http_parser.cpp
+    evpphttp/http_request.cpp
+    evpphttp/http_response.cpp
+    evpphttp/service.cpp
+    #
+    http/context.cpp
+    http/http_server.cpp
+    http/service.cpp
+    #
+    httpc/conn.cpp
+    httpc/conn_pool.cpp
+    httpc/request.cpp
+    httpc/response.cpp
+    httpc/url_parser.cpp
+    #
     sockets.cpp
+    ssl/ssl.cpp
     tcp/connector.cpp
     tcp/tcp_client.cpp
     tcp/tcp_conn.cpp

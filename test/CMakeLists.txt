@@ -8,6 +8,10 @@ set(
     event_loop_thread_test.cpp
     event_loop_thread_pool_test.cpp
     event_watcher_test.cpp
+    http_client_test.cpp
+    http_server_test.cpp
+    http_trivial_test.cpp
+    https_client_test.cpp
     invoke_timer_test.cpp
     sockets_test.cpp
     tcp_client_reconnect_test.cpp

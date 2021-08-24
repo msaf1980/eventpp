@@ -3,11 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "doctest.h"
-
-#define H_ARRAYSIZE(a) \
-    ((sizeof(a) / sizeof(*(a))) / \
-     static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
+#include "test.h"
 
 TEST_CASE("TestParseFromIPPort1")
 {
