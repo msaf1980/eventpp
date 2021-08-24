@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __EVENTPP_FD_CHANNEL_HPP__
+#define __EVENTPP_FD_CHANNEL_HPP__
+
 
 #include "event_watcher.hpp"
 
@@ -91,3 +93,5 @@ private:
 }
 
 
+
+#endif // __EVENTPP_FD_CHANNEL_HPP__
