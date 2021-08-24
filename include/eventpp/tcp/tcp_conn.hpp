@@ -3,12 +3,12 @@
 
 #include <atomic>
 
-#include "base.hpp"
-#include "buffer.hpp"
-#include "slice.hpp"
+//#include "../any.hpp"
+#include "../base.hpp"
+#include "../buffer.hpp"
+#include "../slice.hpp"
+#include "../duration.hpp"
 #include "tcp_callbacks.hpp"
-//#include "any.hpp"
-#include "duration.hpp"
 
 namespace eventpp
 {

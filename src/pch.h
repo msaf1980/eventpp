@@ -12,6 +12,6 @@
 #include <thread>
 #include <vector>
 
-#include <eventpp/utility.hpp>
+#include <eventpp/base.hpp>
 
 #endif /* __PCH_H__ */

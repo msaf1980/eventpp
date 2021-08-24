@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "base.hpp"
-#include "duration.hpp"
+#include "../base.hpp"
+#include "../duration.hpp"
 
 namespace eventpp {
 class EventLoop;

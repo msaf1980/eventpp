@@ -70,7 +70,7 @@ TEST_CASE("testDNSResolverTimeout")
         };
 
         // 1us to make it timeout immediately
-        eventpp::Duration delay(double(0.000001));
+        eventpp::Duration delay(double(0.0000001));
         std::unique_ptr<eventpp::EventLoopThread> t(new eventpp::EventLoopThread);
         t->Start(true);
 
@@ -83,6 +83,7 @@ TEST_CASE("testDNSResolverTimeout")
         {
             usleep(1);
         }
+        usleep(1);
         REQUIRE(err_resolved == EVUTIL_EAI_CANCEL);
         REQUIRE(addrs_resolved.size() == 0);
 

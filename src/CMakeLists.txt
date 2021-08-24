@@ -6,7 +6,6 @@ set(
     EVENTPP_SOURCES
     buffer.cpp
     dns_resolver.cpp
-    connector.cpp
     duration.cpp
     event_loop.cpp
     event_loop_thread.cpp
@@ -17,9 +16,12 @@ set(
     invoke_timer.cpp
     listener.cpp
     sockets.cpp
-    tcp_client.cpp
-    tcp_conn.cpp
-    tcp_server.cpp
+    tcp/connector.cpp
+    tcp/tcp_client.cpp
+    tcp/tcp_conn.cpp
+    tcp/tcp_server.cpp
+    udp/sync_udp_client.cpp
+    udp/udp_server.cpp
     utility.cpp
 )
 

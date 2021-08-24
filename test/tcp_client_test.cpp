@@ -2,9 +2,9 @@
 #include <eventpp/event_loop.hpp>
 #include <eventpp/event_loop_thread.hpp>
 #include <eventpp/event_watcher.hpp>
-#include <eventpp/tcp_client.hpp>
-#include <eventpp/tcp_conn.hpp>
-#include <eventpp/tcp_server.hpp>
+#include <eventpp/tcp/tcp_client.hpp>
+#include <eventpp/tcp/tcp_conn.hpp>
+#include <eventpp/tcp/tcp_server.hpp>
 
 #include "doctest.h"
 

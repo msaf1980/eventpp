@@ -1,34 +1,41 @@
-#include "pch.h"
+#include "../pch.h"
 
 #include <eventpp/base.hpp>
-#include <eventpp/connector.hpp>
+#include <eventpp/dns_resolver.hpp>
 #include <eventpp/event_loop.hpp>
 #include <eventpp/fd_channel.hpp>
 #include <eventpp/sockets.hpp>
-#include <eventpp/dns_resolver.hpp>
-#include <eventpp/tcp_client.hpp>
+#include <eventpp/tcp/connector.hpp>
+#include <eventpp/tcp/tcp_client.hpp>
 
-namespace eventpp {
-Connector::Connector(EventLoop* l, TCPClient* client)
+namespace eventpp
+{
+Connector::Connector(EventLoop * l, TCPClient * client)
     : status_(kDisconnected)
     , loop_(l)
     , owner_tcp_client_(client)
     , remote_addr_(client->remote_addr())
-    , timeout_(client->connecting_timeout()) {
+    , timeout_(client->connecting_timeout())
+{
     //DLOG_TRACE << "raddr=" << remote_addr_;
-    if (sock::SplitHostPort(remote_addr_.data(), remote_host_, remote_port_)) {
+    if (sock::SplitHostPort(remote_addr_.data(), remote_host_, remote_port_))
+    {
         raddr_ = sock::ParseFromIPPort(remote_addr_.data());
     }
 }
 
-Connector::~Connector() {
+Connector::~Connector()
+{
     //DLOG_TRACE;
     assert(loop_->IsInLoopThread());
-    if (status_ == kDNSResolving) {
+    if (status_ == kDNSResolving)
+    {
         assert(!chan_.get());
         assert(!dns_resolver_.get());
         assert(!timer_.get());
-    } else if (!IsConnected()) {
+    }
+    else if (!IsConnected())
+    {
         // A connected tcp-connection's sockfd has been transfered to TCPConn.
         // But the sockfd of unconnected tcp-connections need to be closed by myself.
         // DLOG_TRACE << "close(" << chan_->fd() << ")";
@@ -42,7 +49,8 @@ Connector::~Connector() {
     chan_.reset();
 }
 
-void Connector::Start() {
+void Connector::Start()
+{
     // DLOG_TRACE << "Try to connect " << remote_addr_ << " status=" << StatusToString();
     assert(loop_->IsInLoopThread());
 
@@ -50,7 +58,8 @@ void Connector::Start() {
     timer_->Init();
     timer_->AsyncWait();
 
-    if (!sock::IsZeroAddress(&raddr_)) {
+    if (!sock::IsZeroAddress(&raddr_))
+    {
         Connect();
         return;
     }
@@ -63,58 +72,70 @@ void Connector::Start() {
 }
 
 
-void Connector::Cancel() {
+void Connector::Cancel()
+{
     // DLOG_TRACE << "Cancel to connect " << remote_addr_ << " status=" << StatusToString();
     assert(loop_->IsInLoopThread());
-    if (dns_resolver_) {
+    if (dns_resolver_)
+    {
         dns_resolver_->Cancel();
         dns_resolver_.reset();
     }
 
     assert(timer_);
-    if(timer_) {
+    if (timer_)
+    {
         timer_->Cancel();
         timer_.reset();
     }
 
-    if (status_ == kDNSResolving) {
+    if (status_ == kDNSResolving)
+    {
         assert(chan_.get() == nullptr);
         conn_fn_(-1, "");
     }
 
-    if (chan_.get()) {
+    if (chan_.get())
+    {
         assert(status_ != kDNSResolving);
         chan_->DisableAllEvent();
         chan_->Close();
     }
 }
 
-void Connector::Connect() {
+void Connector::Connect()
+{
     // DLOG_TRACE << remote_addr_ << " status=" << StatusToString();
     assert(fd_ == INVALID_SOCKET);
     fd_ = sock::CreateNonblockingSocket();
     own_fd_ = true;
     assert(fd_ >= 0);
-    const std::string& laddr = owner_tcp_client_->local_addr();
-    if (!laddr.empty()) {
+    const std::string & laddr = owner_tcp_client_->local_addr();
+    if (!laddr.empty())
+    {
         struct sockaddr_storage ss = sock::ParseFromIPPort(laddr.data());
-        struct sockaddr* addr = sock::sockaddr_cast(&ss);
+        struct sockaddr * addr = sock::sockaddr_cast(&ss);
         int rc = bind(fd_, addr, sizeof(*addr));
-        if (rc != 0) {
+        if (rc != 0)
+        {
             int serrno = errno;
             // LOG_ERROR << "bind failed, errno=" << serrno << " " << strerror(serrno);
             HandleError();
             return;
         }
     }
-    struct sockaddr* addr = sock::sockaddr_cast(&raddr_);
+    struct sockaddr * addr = sock::sockaddr_cast(&raddr_);
     int rc = ::connect(fd_, addr, sizeof(*addr));
-    if (rc != 0) {
+    if (rc != 0)
+    {
         int serrno = errno;
-        if (!EVUTIL_ERR_CONNECT_RETRIABLE(serrno)) {
+        if (!EVUTIL_ERR_CONNECT_RETRIABLE(serrno))
+        {
             HandleError();
             return;
-        } else {
+        }
+        else
+        {
             // TODO how to do it
         }
     }
@@ -127,9 +148,11 @@ void Connector::Connect() {
     chan_->AttachToLoop();
 }
 
-void Connector::HandleWrite() {
+void Connector::HandleWrite()
+{
     // DLOG_TRACE << remote_addr_ << " status=" << StatusToString();
-    if (status_ == kDisconnected) {
+    if (status_ == kDisconnected)
+    {
         // The connecting may be timeout, but the write event handler has been
         // dispatched in the EventLoop pending task queue, and next loop time the handle is invoked.
         // So we need to check the status whether it is at a kDisconnected
@@ -140,12 +163,14 @@ void Connector::HandleWrite() {
     assert(status_ == kConnecting);
     int err = 0;
     socklen_t len = sizeof(len);
-    if (getsockopt(chan_->fd(), SOL_SOCKET, SO_ERROR, (char*)&err, (socklen_t*)&len) != 0) {
+    if (getsockopt(chan_->fd(), SOL_SOCKET, SO_ERROR, (char *)&err, (socklen_t *)&len) != 0)
+    {
         err = errno;
         // LOG_ERROR << "getsockopt failed err=" << err << " " << strerror(err);
     }
 
-    if (err != 0) {
+    if (err != 0)
+    {
         EVUTIL_SET_SOCKET_ERROR(err);
         HandleError();
         return;
@@ -164,7 +189,8 @@ void Connector::HandleWrite() {
     status_ = kConnected;
 }
 
-void Connector::HandleError() {
+void Connector::HandleError()
+{
     // DLOG_TRACE << remote_addr_ << " status=" << StatusToString();
     assert(loop_->IsInLoopThread());
     int serrno = errno;
@@ -178,14 +204,16 @@ void Connector::HandleError() {
 
     status_ = kDisconnected;
 
-    if (chan_) {
+    if (chan_)
+    {
         assert(fd_ > 0);
         chan_->DisableAllEvent();
         chan_->Close();
     }
 
     // Avoid DNSResolver callback again when timeout
-    if (dns_resolver_) {
+    if (dns_resolver_)
+    {
         dns_resolver_->Cancel();
         dns_resolver_.reset();
     }
@@ -196,7 +224,8 @@ void Connector::HandleError() {
     // If the connection is refused or it will not try again,
     // We need to notify the user layer that the connection established failed.
     // Otherwise we will try to do reconnection silently.
-    if (EVUTIL_ERR_CONNECT_REFUSED(serrno) || !owner_tcp_client_->auto_reconnect()) {
+    if (EVUTIL_ERR_CONNECT_REFUSED(serrno) || !owner_tcp_client_->auto_reconnect())
+    {
         conn_fn_(-1, "");
     }
 
@@ -206,10 +235,11 @@ void Connector::HandleError() {
     // But if we could not connect to the remote server at the very beginning,
     // the TCPClient's Reconnect() will never be triggled.
     // So Connector needs to do reconnection automatically itself.
-    if (owner_tcp_client_->auto_reconnect()) {
-
+    if (owner_tcp_client_->auto_reconnect())
+    {
         // We must close(fd) firstly and then we can do the reconnection.
-        if (fd_ > 0) {
+        if (fd_ > 0)
+        {
             // DLOG_TRACE << "Connector::HandleError close(" << fd_ << ")";
             assert(own_fd_);
             EVUTIL_CLOSESOCKET(fd_);
@@ -221,22 +251,25 @@ void Connector::HandleError() {
     }
 }
 
-void Connector::OnConnectTimeout() {
+void Connector::OnConnectTimeout()
+{
     // LOG_WARN << "this=" << this << " Connector::OnConnectTimeout status=" << StatusToString() << " fd=" << fd_ << " this=" << this;
     assert(status_ == kConnecting || status_ == kDNSResolving);
     EVUTIL_SET_SOCKET_ERROR(ETIMEDOUT);
     HandleError();
 }
 
-void Connector::OnDNSResolved(const std::vector <struct in_addr>& addrs) {
+void Connector::OnDNSResolved(const std::vector<struct in_addr> & addrs)
+{
     // DLOG_TRACE << "addrs.size=" << addrs.size() << " this=" << this;
-    if (addrs.empty()) {
+    if (addrs.empty())
+    {
         //LOG_ERROR << "this=" << this << " DNS Resolve failed. host=" << dns_resolver_->host();
         HandleError();
         return;
     }
 
-    struct sockaddr_in* addr = sock::sockaddr_in_cast(&raddr_);
+    struct sockaddr_in * addr = sock::sockaddr_in_cast(&raddr_);
     addr->sin_family = AF_INET;
     addr->sin_port = htons(remote_port_);
     addr->sin_addr = addrs[0];
@@ -245,7 +278,8 @@ void Connector::OnDNSResolved(const std::vector <struct in_addr>& addrs) {
     Connect();
 }
 
-std::string Connector::StatusToString() const {
+std::string Connector::StatusToString() const
+{
     H_CASE_STRING_BIGIN(status_);
     H_CASE_STRING(kDisconnected);
     H_CASE_STRING(kDNSResolving);

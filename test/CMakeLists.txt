@@ -14,6 +14,7 @@ set(
     tcp_client_test.cpp
     tcp_server_test.cpp
     time_test.cpp
+    udp_server_test.cpp
 )
 
 set(TEST_LIBRARIES Threads::Threads event)
