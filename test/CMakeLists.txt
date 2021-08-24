@@ -37,4 +37,14 @@ add_test(
     NAME test_eventpp
     COMMAND $<TARGET_FILE:test_eventpp>
 )
-set_tests_properties(test_eventpp PROPERTIES LABELS "thpool")
+set_tests_properties(test_eventpp PROPERTIES LABELS "eventpp")
+
+add_executable(test_http_server_fork
+    http_server_fork_test.cpp
+)
+target_link_libraries(test_http_server_fork ${TEST_LIBRARIES})
+add_test(
+    NAME test_http_server_fork
+    COMMAND $<TARGET_FILE:test_http_server_fork>
+)
+set_tests_properties(test_http_server_fork PROPERTIES LABELS "http_server_fork")

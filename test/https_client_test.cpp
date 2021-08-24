@@ -21,7 +21,7 @@ std::string HttpFetch(const std::string & url)
     InitSSLOnce();
     eventpp::EventLoopThread t;
     t.Start(true);
-    eventpp::httpc::GetRequest * req = new eventpp::httpc::GetRequest(t.loop(), url, eventpp::Duration(1.0));
+    eventpp::httpc::GetRequest * req = new eventpp::httpc::GetRequest(t.loop(), url, eventpp::Duration(10.0));
     volatile bool responsed = false;
     std::string ret;
     req->Execute([req, &ret, &responsed](const std::shared_ptr<eventpp::httpc::Response> & response) mutable {
@@ -50,10 +50,10 @@ TEST_CASE("testHTTPResponse")
     {
         std::string response = HttpFetch("http://httpbin.org/headers?show_env=1");
         REQUIRE(!response.empty());
-        REQUIRE(response.find("http_code=200") != std::string::npos);
-        REQUIRE(response.find("\"Host\": \"httpbin.org\"") != std::string::npos);
-        REQUIRE(response.find("\"X-Forwarded-Port\": \"80\"") != std::string::npos);
-        REQUIRE(response.find("\"X-Forwarded-Proto\": \"http\"") != std::string::npos);
+        REQUIRE_MESSAGE(response.find("http_code=200") != std::string::npos, response);
+        REQUIRE_MESSAGE(response.find("\"Host\": \"httpbin.org\"") != std::string::npos, response);
+        REQUIRE_MESSAGE(response.find("\"X-Forwarded-Port\": \"80\"") != std::string::npos, response);
+        REQUIRE_MESSAGE(response.find("\"X-Forwarded-Proto\": \"http\"") != std::string::npos, response);
         // REQUIRE(response.find("\"Connection\": \"close\"") != std::string::npos);
     }
     catch (const std::exception & e)
@@ -68,10 +68,10 @@ TEST_CASE("testHTTPSResponse")
     {
         std::string response = HttpFetch("https://httpbin.org/headers?show_env=1");
         REQUIRE(!response.empty());
-        REQUIRE(response.find("http_code=200") != std::string::npos);
-        REQUIRE(response.find("\"Host\": \"httpbin.org\"") != std::string::npos);
-        REQUIRE(response.find("\"X-Forwarded-Port\": \"443\"") != std::string::npos);
-        REQUIRE(response.find("\"X-Forwarded-Proto\": \"https\"") != std::string::npos);
+        REQUIRE_MESSAGE(response.find("http_code=200") != std::string::npos, response);
+        REQUIRE_MESSAGE(response.find("\"Host\": \"httpbin.org\"") != std::string::npos, response);
+        REQUIRE_MESSAGE(response.find("\"X-Forwarded-Port\": \"443\"") != std::string::npos, response);
+        REQUIRE_MESSAGE(response.find("\"X-Forwarded-Proto\": \"https\"") != std::string::npos, response);
         // REQUIRE(response.find("\"Connection\": \"close\"") != std::string::npos);
     }
     catch (std::exception & e)
