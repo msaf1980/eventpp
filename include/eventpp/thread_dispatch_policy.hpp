@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __EVENTPP_THREAD_DISPATCH_POLICY_HPP__
+#define __EVENTPP_THREAD_DISPATCH_POLICY_HPP__
 
 namespace eventpp {
 class ThreadDispatchPolicy {
@@ -21,3 +22,4 @@ protected:
     Policy policy_;
 };
 }
+#endif // __EVENTPP_THREAD_DISPATCH_POLICY_HPP__

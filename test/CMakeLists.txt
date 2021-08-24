@@ -3,12 +3,16 @@ set(
     main.cpp
     buffer_test.cpp
     dns_resolver_test.cpp
+    event_condition_test.cpp
     event_loop_test.cpp
     event_loop_thread_test.cpp
     event_loop_thread_pool_test.cpp
     event_watcher_test.cpp
     invoke_timer_test.cpp
     sockets_test.cpp
+    tcp_client_reconnect_test.cpp
+    tcp_client_test.cpp
+    tcp_server_test.cpp
     time_test.cpp
 )
 
