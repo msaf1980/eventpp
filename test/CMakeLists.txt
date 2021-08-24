@@ -2,6 +2,7 @@ set(
     TEST_SOURCES
     main.cpp
     buffer_test.cpp
+    dns_resolver_test.cpp
     event_loop_test.cpp
     event_loop_thread_test.cpp
     event_loop_thread_pool_test.cpp
