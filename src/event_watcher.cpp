@@ -195,9 +195,9 @@ bool PipeEventWatcher::AsyncWait()
 
 void PipeEventWatcher::Notify()
 {
-    char buf[1] = {};
+    char c = '\0';
 
-    if (::send(pipe_[0], buf, sizeof(buf), 0) < 0)
+    if (send(pipe_[0], &c, sizeof(c), 0) < 0)
     {
         return;
     }
