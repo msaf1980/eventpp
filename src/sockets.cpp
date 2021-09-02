@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#include <limits.h>
+
 #include <eventpp/base.hpp>
 #include <eventpp/duration.hpp>
 #include <eventpp/sockets.hpp>
@@ -9,7 +11,7 @@ namespace eventpp
 namespace sock
 {
     static const std::string empty_string;
-    
+
     evpp_socket_t CreateNonblockingSocket()
     {
         int serrno = 0;
@@ -72,16 +74,10 @@ namespace sock
         return fd;
     }
 
-    bool ParseFromIPPort(const char * address, struct sockaddr_storage & ss)
+    bool ToSockaddr(const std::string_view & host, unsigned short port, struct sockaddr_storage & ss)
     {
         memset(&ss, 0, sizeof(ss));
-        std::string host;
-        int port;
-        if (!SplitHostPort(address, host, port))
-        {
-            return false;
-        }
-
+  
         short family = AF_INET;
         auto index = host.find(':');
         if (index != std::string::npos)
@@ -113,29 +109,47 @@ namespace sock
         return true;
     }
 
-    bool SplitHostPort(const char * address, std::string & host, int & port)
+    bool ParseFromIPPort(const char * address, struct sockaddr_storage & ss)
     {
-        std::string a = address;
-        if (a.empty())
+        memset(&ss, 0, sizeof(ss));
+        std::string host;
+        unsigned short port;
+        if (!SplitHostPort(address, host, port))
         {
             return false;
         }
 
-        size_t index = a.rfind(':');
+        return ToSockaddr(host, port, ss);
+    }
+
+    bool SplitHostPort(const std::string_view address, std::string & host, unsigned short & port)
+    {
+        if (address.empty())
+        {
+            return false;
+        }
+
+        size_t index = address.rfind(':');
         if (index == std::string::npos)
         {
             // LOG_ERROR << "Address specified error <" << address << ">. Cannot find ':'";
             return false;
         }
 
-        if (index == a.size() - 1)
+        if (index == address.size() - 1)
         {
             return false;
         }
 
-        port = std::atoi(&a[index + 1]);
+        // TODO: detect service instead of port number
+        int port_ = std::atoi(&address.data()[index + 1]);
+        if (port_ < 0 || port_ > USHRT_MAX) {
+            return false;
+        }
+        port = static_cast<unsigned short>(port_);
 
-        host = std::string(address, index);
+        // TODO: reduce allocations
+        host = address.substr(0, index);
         if (host[0] == '[')
         {
             if (*host.rbegin() != ']')
@@ -156,6 +170,13 @@ namespace sock
         }
 
         return true;
+    }
+
+    bool SplitHostPort(const char * address, std::string & host, unsigned short & port)
+    {
+        std::string_view a(address, strlen(address));
+
+        return SplitHostPort(a, host, port);
     }
 
     struct sockaddr_storage GetLocalAddr(evpp_socket_t sockfd)

@@ -15,7 +15,8 @@ public:
          const std::string& /*remote address with format "ip:port"*/,
          const struct sockaddr_in* /*remote address*/) >
     NewConnectionCallback;
-    Listener(EventLoop* loop, const std::string& addr/*local listening address : ip:port*/);
+    Listener(EventLoop* loop, const std::string_view & addr/*local listening address : ip:port*/);
+    Listener(EventLoop* loop, const std::string_view & host, unsigned short port);
     ~Listener();
 
     // socket listen
@@ -35,7 +36,8 @@ private:
 
     evpp_socket_t fd_ = -1;// The listening socket fd
     EventLoop* loop_;
-    std::string addr_;
+    std::string host_;
+    unsigned short port_;
     std::unique_ptr<FdChannel> chan_;
     NewConnectionCallback new_conn_fn_;
 };

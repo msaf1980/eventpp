@@ -7,9 +7,15 @@
 
 namespace eventpp
 {
-Listener::Listener(EventLoop * l, const std::string & addr) : loop_(l), addr_(addr)
+Listener::Listener(EventLoop * l, const std::string_view & addr) : loop_(l)
 {
     // DLOG_TRACE << "addr=" << addr;
+
+    sock::SplitHostPort(addr, host_, port_);
+}
+
+Listener::Listener(EventLoop * l, const std::string_view & host, unsigned short port) : loop_(l), host_(host), port_(port)
+{
 }
 
 Listener::~Listener()
@@ -28,7 +34,8 @@ bool Listener::Listen(int backlog)
         return false;
     }
 
-    struct sockaddr_storage addr = sock::ParseFromIPPort(addr_.data());
+    struct sockaddr_storage addr;
+    sock::ToSockaddr(host_, port_, addr);
     // TODO Add retry when failed
     int ret = bind(fd_, sock::sockaddr_cast(&addr), static_cast<socklen_t>(sizeof(struct sockaddr)));
     if (ret < 0)

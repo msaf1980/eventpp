@@ -50,7 +50,7 @@ private:
 
     std::string remote_addr_; // host:port
     std::string remote_host_; // host
-    int remote_port_ = 0; // port
+    unsigned short remote_port_ = 0; // port
     struct sockaddr_storage raddr_;
 
     Duration timeout_;

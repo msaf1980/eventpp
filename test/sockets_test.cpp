@@ -93,7 +93,7 @@ TEST_CASE("TestSplitHostPort1")
     {
         std::string addr;
         std::string host;
-        int port;
+        unsigned short port;
     } dd[] = {
         {"192.168.0.6:99", "192.168.0.6", 99},
         {"101.205.216.65:60931", "101.205.216.65", 60931},
@@ -106,7 +106,7 @@ TEST_CASE("TestSplitHostPort1")
     for (size_t i = 0; i < H_ARRAYSIZE(dd); i++)
     {
         std::string host;
-        int port;
+        unsigned short port;
         auto rc = eventpp::sock::SplitHostPort(dd[i].addr.data(), host, port);
         REQUIRE(rc);
         REQUIRE(dd[i].host == host);
@@ -120,7 +120,7 @@ TEST_CASE("TestSplitHostPort2")
     {
         std::string addr;
         std::string host;
-        int port;
+        unsigned short port;
     } dd[] = {
         {"[fe80::c455:9298:85d2:f2b6:8080", "fe80::c455:9298:85d2:f2b6", 8080} // This is not OK
     };
@@ -128,7 +128,7 @@ TEST_CASE("TestSplitHostPort2")
     for (size_t i = 0; i < H_ARRAYSIZE(dd); i++)
     {
         std::string host;
-        int port;
+        unsigned short port;
         auto rc = eventpp::sock::SplitHostPort(dd[i].addr.data(), host, port);
         REQUIRE(!rc);
     }
