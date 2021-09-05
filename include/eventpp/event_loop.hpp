@@ -1,7 +1,7 @@
 #ifndef EVENT_LOOP
 #define EVENT_LOOP
 
-#include <any>
+// #include <any>
 #include <atomic>
 #include <functional>
 #include <mutex>
@@ -98,18 +98,18 @@ public:
     //     return context_[index];
     // }
 
-    void set_context(const std::any & c) { context_[0] = c; }
-    const std::any & context() const { return context_[0]; }
-    void set_context(int index, const std::any & c)
-    {
-        assert(index < kContextCount && index >= 0);
-        context_[index] = c;
-    }
-    const std::any & context(int index) const
-    {
-        assert(index < kContextCount && index >= 0);
-        return context_[index];
-    }
+    // void set_context(const std::any & c) { context_[0] = c; }
+    // const std::any & context() const { return context_[0]; }
+    // void set_context(int index, const std::any & c)
+    // {
+    //     assert(index < kContextCount && index >= 0);
+    //     context_[index] = c;
+    // }
+    // const std::any & context(int index) const
+    // {
+    //     assert(index < kContextCount && index >= 0);
+    //     return context_[index];
+    // }
 
     int pending_functor_count() const { return pending_functor_count_.load(); }
     const std::thread::id & tid() const { return tid_; }
@@ -129,13 +129,13 @@ private:
     Duration shutdown_timeout_;
     bool evbase_destroy_;
     std::thread::id tid_;
-    enum
-    {
-        kContextCount = 16,
-    };
+    // enum
+    // {
+    //     kContextCount = 16,
+    // };
 
-    // Any context_[kContextCount];
-    std::any context_[kContextCount];
+    // // Any context_[kContextCount];
+    // std::any context_[kContextCount];
 
     std::mutex mutex_;
     // We use this to notify the thread when we put a task into the pending_functors_ queue
