@@ -99,7 +99,7 @@ void EventLoop::Init()
 bool EventLoop::InitNotifyPipeWatcher()
 {
     // Initialized task queue notify pipe watcher
-    watcher_.reset(new PipeEventWatcher(this, std::bind(&EventLoop::DoPendingFunctors, this)));
+    watcher_.reset(new EventWatcher(this, std::bind(&EventLoop::DoPendingFunctors, this)));
     return watcher_->Init();
 }
 

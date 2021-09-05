@@ -7,6 +7,8 @@
 #include <eventpp/event_loop.hpp>
 #include <eventpp/event_loop_thread.hpp>
 #include <eventpp/event_watcher.hpp>
+#include <eventpp/event_watcher_signal.hpp>
+#include <eventpp/event_watcher_timer.hpp>
 #include <eventpp/timestamp.hpp>
 
 #include "test.h"
@@ -82,7 +84,7 @@ TEST_CASE("testTimerEventWatcher")
 
 TEST_CASE("testsocketpair")
 {
-    evpp_socket_t sockpair[2];
+    eventpp_socket_t sockpair[2];
     memset(sockpair, 0, sizeof(sockpair[0] * 2));
     int r = evutil_socketpair(AF_UNIX, SOCK_STREAM, 0, sockpair);
     REQUIRE(r >= 0);

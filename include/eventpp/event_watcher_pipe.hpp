@@ -1,5 +1,5 @@
-#ifndef __EVENTPP_EVENT_WATCHER_HPP__
-#define __EVENTPP_EVENT_WATCHER_HPP__
+#ifndef __EVENTPP_EVENT_WATCHER_PIPE_HPP__
+#define __EVENTPP_EVENT_WATCHER_PIPE_HPP__
 
 #include "base.hpp"
 #include "duration.hpp"
@@ -12,12 +12,12 @@ namespace eventpp
 {
 class EventLoop;
 
-class EVENTPP_EXPORT EventWatcher : public EventWatcherBase
+class EVENTPP_EXPORT PipeEventWatcher : public EventWatcherBase
 {
 public:
-    EventWatcher(EventLoop * loop, const Handler & handler);
-    EventWatcher(EventLoop * loop, Handler && handler);
-    ~EventWatcher();
+    PipeEventWatcher(EventLoop * loop, const Handler & handler);
+    PipeEventWatcher(EventLoop * loop, Handler && handler);
+    ~PipeEventWatcher();
 
     bool AsyncWait();
     bool Notify();
@@ -32,4 +32,4 @@ private:
 
 }
 
-#endif // __EVENT_WATCHER_HPP__
+#endif // __EVENT_WATCHER_PIPE_HPP__

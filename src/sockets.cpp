@@ -12,12 +12,12 @@ namespace sock
 {
     static const std::string empty_string;
 
-    evpp_socket_t CreateNonblockingSocket()
+    eventpp_socket_t CreateNonblockingSocket()
     {
         int serrno = 0;
 
         /* Create listen socket */
-        evpp_socket_t fd = ::socket(AF_INET, SOCK_STREAM, 0);
+        eventpp_socket_t fd = ::socket(AF_INET, SOCK_STREAM, 0);
         if (fd == -1)
         {
             // serrno = errno;
@@ -50,9 +50,9 @@ namespace sock
         return INVALID_SOCKET;
     }
 
-    evpp_socket_t CreateUDPServer(int port)
+    eventpp_socket_t CreateUDPServer(int port)
     {
-        evpp_socket_t fd = socket(AF_INET, SOCK_DGRAM, 0);
+        eventpp_socket_t fd = socket(AF_INET, SOCK_DGRAM, 0);
         if (fd == -1)
         {
             // int serrno = errno;
@@ -179,7 +179,7 @@ namespace sock
         return SplitHostPort(a, host, port);
     }
 
-    struct sockaddr_storage GetLocalAddr(evpp_socket_t sockfd)
+    struct sockaddr_storage GetLocalAddr(eventpp_socket_t sockfd)
     {
         struct sockaddr_storage laddr;
         memset(&laddr, 0, sizeof laddr);
@@ -273,7 +273,7 @@ namespace sock
         return empty_string;
     }
 
-    int SetTimeout(evpp_socket_t fd, uint32_t timeout_ms)
+    int SetTimeout(eventpp_socket_t fd, uint32_t timeout_ms)
     {
 #ifdef H_OS_WINDOWS
         DWORD tv = timeout_ms;
@@ -285,21 +285,21 @@ namespace sock
         return setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof(tv));
     }
 
-    int SetTimeout(evpp_socket_t fd, const Duration & timeout) { return SetTimeout(fd, (uint32_t)(timeout.Milliseconds())); }
+    int SetTimeout(eventpp_socket_t fd, const Duration & timeout) { return SetTimeout(fd, (uint32_t)(timeout.Milliseconds())); }
 
-    int SetKeepAlive(evpp_socket_t fd, bool on)
+    int SetKeepAlive(eventpp_socket_t fd, bool on)
     {
         int optval = on ? 1 : 0;
         return setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, reinterpret_cast<const char *>(&optval), static_cast<socklen_t>(sizeof optval));
     }
 
-    int SetReuseAddr(evpp_socket_t fd)
+    int SetReuseAddr(eventpp_socket_t fd)
     {
         int optval = 1;
         return setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<const char *>(&optval), static_cast<socklen_t>(sizeof optval));
     }
 
-    int SetReusePort(evpp_socket_t fd)
+    int SetReusePort(eventpp_socket_t fd)
     {
 #ifdef SO_REUSEPORT
         int optval = 1;
@@ -311,7 +311,7 @@ namespace sock
     }
 
 
-    int SetTCPNoDelay(evpp_socket_t fd, bool on)
+    int SetTCPNoDelay(eventpp_socket_t fd, bool on)
     {
         int optval = on ? 1 : 0;
         return setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<const char *>(&optval), static_cast<socklen_t>(sizeof optval));
@@ -321,7 +321,7 @@ namespace sock
 }
 
 #ifdef H_OS_WINDOWS
-int readv(evpp_socket_t sockfd, struct iovec * iov, int iovcnt)
+int readv(eventpp_socket_t sockfd, struct iovec * iov, int iovcnt)
 {
     DWORD readn = 0;
     DWORD flags = 0;

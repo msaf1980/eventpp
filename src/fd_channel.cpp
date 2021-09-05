@@ -53,7 +53,7 @@ bool FdChannel::AttachToLoop()
     }
 
     assert(!attached_);
-    event_assign(event_, loop_->EventBase(), fd_, events_ | EV_PERSIST, &FdChannel::HandleEvent, this);
+    event_assign(event_, loop_->event_base(), fd_, events_ | EV_PERSIST, &FdChannel::HandleEvent, this);
 
     if (EventAdd(event_, nullptr) == 0)
     {

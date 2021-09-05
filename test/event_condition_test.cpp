@@ -3,6 +3,7 @@
 
 #include <eventpp/event_loop.hpp>
 #include <eventpp/event_watcher.hpp>
+#include <eventpp/event_watcher_pipe.hpp>
 
 #include "test.h"
 
@@ -42,7 +43,7 @@ static void Handle(eventpp::EventLoop * loop)
     loop->Stop();
 }
 
-static void MyEventThread(eventpp::EventLoop * loop, eventpp::PipeEventWatcher * ev)
+static void MyPipeEventThread(eventpp::EventLoop * loop, eventpp::PipeEventWatcher * ev)
 {
     if (ev->Init())
     {
@@ -53,10 +54,39 @@ static void MyEventThread(eventpp::EventLoop * loop, eventpp::PipeEventWatcher *
     delete ev; // make sure to initialize and delete in the same thread.
 }
 
+
 TEST_CASE("testPipeEventWatcher")
 {
     std::unique_ptr<eventpp::EventLoop> loop(new eventpp::EventLoop);
     eventpp::PipeEventWatcher * ev = new eventpp::PipeEventWatcher(loop.get(), std::bind(&Handle, loop.get()));
+    std::thread th(MyPipeEventThread, loop.get(), ev);
+    
+    while (!loop->IsRunning())
+    {
+        ::usleep(100 * 100);
+    }
+    ev->Notify();
+    th.join();
+    loop.reset();
+    REQUIRE(g_event_handler_called == true);
+    REQUIRE(eventpp::GetActiveEventCount() == 0);
+}
+
+static void MyEventThread(eventpp::EventLoop * loop, eventpp::EventWatcher * ev)
+{
+    if (ev->Init())
+    {
+        ev->AsyncWait();
+    }
+
+    loop->Run();
+    delete ev; // make sure to initialize and delete in the same thread.
+}
+
+TEST_CASE("testEventWatcher")
+{
+    std::unique_ptr<eventpp::EventLoop> loop(new eventpp::EventLoop);
+    eventpp::EventWatcher * ev = new eventpp::EventWatcher(loop.get(), std::bind(&Handle, loop.get()));
     std::thread th(MyEventThread, loop.get(), ev);
     
     while (!loop->IsRunning())

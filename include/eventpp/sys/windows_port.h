@@ -50,23 +50,23 @@
 //! Module symbol export
 // #ifdef H_WINDOWS_API
 // #   ifndef  H_STATIC_LIB_EVPP
-// #       ifdef  EVPP_EXPORTS
-// #           define EVPP_EXPORT __declspec(dllexport)
+// #       ifdef  EVENTPP_EXPORTS
+// #           define EVENTPP_EXPORT __declspec(dllexport)
 // #       else
-// #           define EVPP_EXPORT __declspec(dllimport)
+// #           define EVENTPP_EXPORT __declspec(dllimport)
 // #       endif
 // #   else
-// #       define EVPP_EXPORT
+// #       define EVENTPP_EXPORT
 // #   endif
 // #else
-// #   define EVPP_EXPORT
+// #   define EVENTPP_EXPORT
 // #endif
 
-#define EVPP_EXPORT
+#define EVENTPP_EXPORT
 
 // We must link against these libraries on windows platform for Visual Studio IDE
 #ifdef _WIN32
-#ifndef EVPP_EXPORTS
+#ifndef EVENTPP_EXPORTS
 #pragma comment(lib, "evpp_static.lib")
 #endif
 #pragma comment(lib, "Ws2_32.lib")

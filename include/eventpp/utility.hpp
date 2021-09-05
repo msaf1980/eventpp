@@ -16,7 +16,7 @@
 
 namespace eventpp
 {
-EVPP_EXPORT std::string strerror(int e);
+EVENTPP_EXPORT std::string strerror(int e);
 
 template< class StringVector,
           class StringType,

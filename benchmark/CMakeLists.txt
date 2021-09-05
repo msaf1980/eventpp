@@ -1,4 +1,5 @@
 add_subdirectory(gettimeofday)
+add_subdirectory(event_watcher)
 # add_subdirectory(pingpong)
 #add_subdirectory(http)
 #add_subdirectory(ioevent)

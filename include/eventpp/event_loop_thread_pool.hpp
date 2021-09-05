@@ -9,7 +9,7 @@
 
 namespace eventpp
 {
-class EVPP_EXPORT EventLoopThreadPool : public ServerStatus
+class EVENTPP_EXPORT EventLoopThreadPool : public ServerStatus
 {
 public:
     typedef std::function<void()> DoneCallback;

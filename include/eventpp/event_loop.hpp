@@ -39,7 +39,7 @@ namespace eventpp
 // This class is a wrapper of event_base but not only a wrapper.
 // It provides a simple way to run a IO Event driving loop.
 // One thread one loop.
-class EVPP_EXPORT EventLoop : public ServerStatus
+class EVENTPP_EXPORT EventLoop : public ServerStatus
 {
 public:
     typedef std::function<void()> Functor;
@@ -139,7 +139,7 @@ private:
 
     std::mutex mutex_;
     // We use this to notify the thread when we put a task into the pending_functors_ queue
-    std::shared_ptr<PipeEventWatcher> watcher_;
+    std::shared_ptr<EventWatcher> watcher_;
     // When we put a task into the pending_functors_ queue,
     // we need to notify the thread to execute it. But we don't want to notify repeatedly.
     std::atomic<bool> notified_;

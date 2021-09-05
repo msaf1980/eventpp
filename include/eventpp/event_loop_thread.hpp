@@ -13,7 +13,7 @@ namespace eventpp
     
 class EventLoop;
 
-class EVPP_EXPORT EventLoopThread : public ServerStatus
+class EVENTPP_EXPORT EventLoopThread : public ServerStatus
 {
 public:
     enum

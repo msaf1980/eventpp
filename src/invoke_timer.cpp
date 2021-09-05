@@ -2,7 +2,7 @@
 
 #include "eventpp/base.hpp"
 #include "eventpp/event_loop.hpp"
-#include "eventpp/event_watcher.hpp"
+#include "eventpp/event_watcher_timer.hpp"
 
 namespace eventpp {
 

@@ -15,7 +15,7 @@ class InvokeTimer;
 
 typedef std::shared_ptr<InvokeTimer> InvokeTimerPtr;
 
-class EVPP_EXPORT InvokeTimer : public std::enable_shared_from_this<InvokeTimer>
+class EVENTPP_EXPORT InvokeTimer : public std::enable_shared_from_this<InvokeTimer>
 {
 public:
     typedef std::function<void()> Functor;

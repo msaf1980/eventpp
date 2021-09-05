@@ -12,7 +12,7 @@
 
 namespace eventpp
 {
-class EVPP_EXPORT Buffer
+class EVENTPP_EXPORT Buffer
 {
 public:
     static const size_t kCheapPrependSize;
@@ -246,7 +246,7 @@ public:
 
     // ReadFromFD reads data from a fd directly into buffer,
     // and return result of readv, errno is saved into saved_errno
-    ssize_t ReadFromFD(evpp_socket_t fd, int * saved_errno);
+    ssize_t ReadFromFD(eventpp_socket_t fd, int * saved_errno);
 
     // Next returns a slice containing the next n bytes from the buffer,
     // advancing the buffer as if the bytes had been returned by Read.

@@ -1,5 +1,5 @@
-#ifndef __EVENTPP_DNS_RESOLVER_HPP__
-#define __EVENTPP_DNS_RESOLVER_HPP__
+#ifndef DNS_RESOLVER
+#define DNS_RESOLVER
 
 #include "inner_pre.hpp"
 #include "duration.hpp"
@@ -10,7 +10,7 @@ struct evdns_getaddrinfo_request;
 namespace eventpp {
 class EventLoop;
 class TimerEventWatcher;
-class EVPP_EXPORT DNSResolver : public std::enable_shared_from_this<DNSResolver> {
+class EVENTPP_EXPORT DNSResolver : public std::enable_shared_from_this<DNSResolver> {
 public:
     //TODO IPv6 DNS resolver
     typedef std::function<void(const std::vector<struct in_addr>& addrs, int err)> Functor;
@@ -48,4 +48,4 @@ private:
 
 }
 
-#endif // __EVENTPP_DNS_RESOLVER_HPP__
+#endif /* DNS_RESOLVER */

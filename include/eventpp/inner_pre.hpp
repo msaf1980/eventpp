@@ -25,7 +25,7 @@ int EventDel(struct event *);
 
 namespace eventpp
 {
-EVPP_EXPORT int GetActiveEventCount();
+EVENTPP_EXPORT int GetActiveEventCount();
 }
 
 

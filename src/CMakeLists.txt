@@ -10,8 +10,12 @@ set(
     event_loop.cpp
     event_loop_thread.cpp
     event_loop_thread_pool.cpp
+    event_watcher_base.cpp
     event_watcher.cpp
-    # fd_channel.cpp
+    event_watcher_pipe.cpp
+    event_watcher_signal.cpp
+    event_watcher_timer.cpp
+    fd_channel.cpp
     inner_pre.cpp
     invoke_timer.cpp
     #

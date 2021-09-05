@@ -1,5 +1,8 @@
 #include <eventpp/event_loop.hpp>
 #include <eventpp/event_watcher.hpp>
+#include <eventpp/event_watcher_pipe.hpp>
+#include <eventpp/event_watcher_signal.hpp>
+#include <eventpp/event_watcher_timer.hpp>
 #include <eventpp/timestamp.hpp>
 
 #include <stdio.h>
@@ -91,7 +94,7 @@ TEST_CASE("TestEventLoop3")
 }
 
 
-eventpp::EventLoop * loop = nullptr;
+eventpp::EventLoop * loop;
 eventpp::InvokeTimerPtr invoke_timer;
 int count = 0;
 int active;
@@ -107,26 +110,24 @@ void Run()
     }
 }
 
-void NewEventLoop(struct event_base* base) {
-    loop = new eventpp::EventLoop(base);
+void NewEventLoop(eventpp::EventLoop *loop) {
     invoke_timer = loop->RunEvery(eventpp::Duration(0.1), &Run);
 }
 
 // Test creating EventLoop from a exist event_base
 TEST_CASE("TestEventLoop4")
 {
-    struct event_base* base = event_base_new();
-    auto timer = std::make_shared<eventpp::TimerEventWatcher>(base, std::bind(&NewEventLoop, base), eventpp::Duration(1.0));
+    loop = new eventpp::EventLoop();
+    auto timer = std::make_shared<eventpp::TimerEventWatcher>(loop, std::bind(&NewEventLoop, loop), eventpp::Duration(1.0));
     active = 6;
     timer->Init();
     timer->AsyncWait();
-    event_base_dispatch(base);
-    event_base_free(base);
-    delete loop;
+    loop->Run();
     invoke_timer.reset();
     timer.reset();
     REQUIRE(active == 0);
     REQUIRE(eventpp::GetActiveEventCount() == 0);
+    delete loop;
 }
 
 
