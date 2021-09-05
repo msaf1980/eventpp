@@ -1,0 +1,101 @@
+#include "pch.h"
+
+#ifdef H_OS_WINDOWS
+#    pragma comment(lib, "Ws2_32.lib")
+#endif
+
+#ifndef H_OS_WINDOWS
+#    include <signal.h>
+#endif
+
+#include <iostream>
+#include <map>
+#include <mutex>
+#include <thread>
+
+#include <event2/event_struct.h>
+
+#include <eventpp/inner_pre.hpp>
+
+#include <eventpp/base.hpp>
+
+namespace eventpp
+{
+struct OnStartup
+{
+    OnStartup()
+    {
+#ifndef H_OS_WINDOWS
+        if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
+        {
+            fprintf(stderr, "SIGPIPE set failed\n");
+        }
+        // LOG_INFO << "ignore SIGPIPE";
+#endif
+    }
+    ~OnStartup() { }
+} __s_onstartup;
+}
+
+#ifdef H_DEBUG_MODE
+static std::map<struct event *, std::thread::id> evmap;
+static std::mutex mutex;
+
+int EventAdd(struct event * ev, const struct timeval * timeout)
+{
+    {
+        std::lock_guard<std::mutex> guard(mutex);
+        if (evmap.find(ev) == evmap.end())
+        {
+            auto id = std::this_thread::get_id();
+            evmap[ev] = id;
+        }
+        else
+        {
+            std::cerr << "Event " << ev << " fd=" << ev->ev_fd << " event_add twice!\n";
+            assert("event_add twice");
+        }
+    }
+    // LOG_DEBUG << "event_add ev=" << ev << " fd=" << ev->ev_fd << " user_ptr=" << ev->ev_arg << " tid=" << std::this_thread::get_id();
+    return event_add(ev, timeout);
+}
+
+int EventDel(struct event * ev)
+{
+    {
+        std::lock_guard<std::mutex> guard(mutex);
+        auto it = evmap.find(ev);
+        if (it == evmap.end())
+        {
+            std::cerr << "Event " << ev << " fd=" << ev->ev_fd << " not exist in event loop, maybe event_del twice.";
+            assert("event_del twice");
+        }
+        else
+        {
+            auto id = std::this_thread::get_id();
+            if (id != it->second)
+            {
+                std::cerr << "Event " << ev << " fd=" << ev->ev_fd << " deleted in different thread.";
+                assert(it->second == id);
+            }
+            evmap.erase(it);
+        }
+    }
+    // LOG_DEBUG << "event_del ev=" << ev << " fd=" << ev->ev_fd << " user_ptr=" << ev->ev_arg << " tid=" << std::this_thread::get_id();
+    return event_del(ev);
+}
+
+#endif
+
+namespace eventpp
+{
+int GetActiveEventCount()
+{
+#ifdef H_DEBUG_MODE
+    return evmap.size();
+#else
+    return 0;
+#endif
+}
+
+}
